@@ -7,6 +7,8 @@
 #include <chrono>
 #include <iostream>
 
+constexpr uint64_t VERSION = 1;
+
 void test(void* arena, char* start, char* size, char* target);
 
 std::atomic<uint64_t> checksum{0};
@@ -290,8 +292,9 @@ void measure(std::string_view title, uint64_t s1, uint64_t s2) {
 }
 
 int main(int argc, char* argv[]) {
-  std::cout << "Hello, I measure performance of string and memory operations."
-            << std::endl;
+  std::cout << "Hello, I measure performance of string and memory operations. "
+               "Version: "
+            << VERSION << std::endl;
   if (argc > 1) {
     testTime = std::chrono::duration<double>(atol(argv[1]));
   }
