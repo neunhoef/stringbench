@@ -6,6 +6,7 @@
 #include <atomic>
 #include <chrono>
 #include <iostream>
+#include <vector>
 
 constexpr uint64_t VERSION = 1;
 
