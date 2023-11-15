@@ -1,4 +1,4 @@
 #!/bin/sh
-if [ ! -d fmt ] {
+if [ ! -d fmt ] ; then
     git clone https://github.com/fmtlib/fmt
-end
+fi
