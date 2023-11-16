@@ -1,4 +1,5 @@
 #!/usr/bin/fish
-#cmake .. -DCMAKE_CXX_FLAGS="-D_GLIBCXX_DEBUG -g" -DCMAKE_EXE_LINKER_FLAGS="-fuse-ld=lld -g" -DCMAKE_SHARED_LINKER_FLAGS=-fuse-ld=lld -DCMAKE_CXX_COMPILER=/usr/lib/ccache/clang++-15 $argv
-cmake .. -DCMAKE_CXX_FLAGS="-D_GLIBCXX_DEBUG -g" -DCMAKE_EXE_LINKER_FLAGS="-fuse-ld=lld -g" -DCMAKE_SHARED_LINKER_FLAGS=-fuse-ld=lld -DCMAKE_CXX_COMPILER=/usr/lib/ccache/g++ $argv
+cmake .. -DCMAKE_CXX_FLAGS="-D_GLIBCXX_DEBUG -g -march=sandybridge -static" -DCMAKE_EXE_LINKER_FLAGS="-fuse-ld=lld -g" -DCMAKE_EXE_LINKER_FLAGS="-fuse-ld=lld -g /usr/lib/libjemalloc.a -lpthread -lstdc++" -DCMAKE_CXX_COMPILER=/usr/lib/ccache/bin/clang++-16 $argv
+#cmake .. -DCMAKE_CXX_FLAGS="-D_GLIBCXX_DEBUG -g -static" -DCMAKE_EXE_LINKER_FLAGS="-fuse-ld=lld -g" -DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=lld -DCMAKE_CXX_COMPILER=/usr/lib/ccache/bin/g++ $argv
+#cmake .. -DCMAKE_CXX_FLAGS="-D_GLIBCXX_DEBUG -g -static" $argv
 

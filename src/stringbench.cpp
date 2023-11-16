@@ -181,13 +181,13 @@ struct MemMove {
     }
   }
   uint64_t work(uint64_t) {
-    memcpy(&v[pos2], &v[pos1], size2);
+    memmove(&v[pos2], &v[pos1], size2);
     pos1 += 47153;
-    if (pos1 > size1 - size2) {
+    if (pos1 >= size1 - size2) {
       pos1 = pos1 % (size1 - size2);
     }
     pos2 += 97251;
-    if (pos2 > size1 - size2) {
+    if (pos2 >= size1 - size2) {
       pos2 = pos2 % (size1 - size2);
     }
     return v[pos1];
