@@ -399,7 +399,7 @@ int main(int argc, char* argv[]) {
     memcpy:
         Creates a memory area of size s1 and then uses memcpy to copy
         some random area of size s2 to another one (non-overlapping).
-        memmove: Creates a memory area of size s1 and then uses memmove to
+    memmove: Creates a memory area of size s1 and then uses memmove to
         copy some random area of size s2 to another one (possibly
         overlapping).
     memset:
