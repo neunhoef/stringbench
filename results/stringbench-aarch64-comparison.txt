@@ -1,0 +1,79 @@
+.-------------------------------------------------------------------------.--------------.----------.
+| aarch64      test              |     s1     |     s2     | musl, gcc11  | glibc,clang15|glibc/musl|
+|-------------------------------------------------------------------------|--------------|----------|
+> string_copy                    |     100001 |         32 |           79 |           59 |   0.7468 |
+> string_copy                    |     100001 |         80 |          120 |          102 |   0.8500 |
+> string_copy                    |     100001 |        257 |          187 |          197 |   1.0535 |
+> string_copy                    |      10001 |       1234 |          176 |          176 |   1.0000 |
+> string_copy                    |       1001 |    1048593 |        63115 |        64370 |   1.0199 |
+|-------------------------------------------------------------------------|--------------|----------|
+> substr                         |     100001 |         32 |           54 |           39 |   0.7222 |
+> substr                         |     100001 |         80 |           62 |           40 |   0.6452 |
+> substr                         |     100001 |        257 |           90 |           42 |   0.4667 |
+> substr                         | 1073741841 |         48 |          185 |          178 |   0.9622 |
+> substr                         | 1073741841 |       1234 |          399 |          410 |   1.0276 |
+> substr                         | 1073741841 |    1626361 |       600236 |        91953 |   0.1532 |
+|-------------------------------------------------------------------------|--------------|----------|
+> strlen                         |     100001 |         32 |           41 |           39 |   0.9512 |
+> strlen                         |     100001 |         80 |           82 |           57 |   0.6951 |
+> strlen                         |     100001 |        257 |          238 |          181 |   0.7605 |
+> strlen                         |      10001 |       1234 |          231 |          145 |   0.6277 |
+> strlen                         |       1001 |    1048593 |       113070 |        51659 |   0.4569 |
+|-------------------------------------------------------------------------|--------------|----------|
+> memcpy                         |    1048593 |         32 |           15 |           19 |   1.2667 |
+> memcpy                         |    1048593 |         80 |           19 |           21 |   1.1053 |
+> memcpy                         |    1048593 |        257 |           35 |           32 |   0.9143 |
+> memcpy                         |    1048593 |       1234 |          104 |           89 |   0.8558 |
+> memcpy                         | 1073741841 |         32 |           79 |           73 |   0.9241 |
+> memcpy                         | 1073741841 |       1234 |          305 |          286 |   0.9377 |
+> memcpy                         | 1073741841 |      40763 |         2740 |         2479 |   0.9047 |
+|-------------------------------------------------------------------------|--------------|----------|
+> memmove                        |    1048593 |         32 |           15 |           18 |   1.2000 |
+> memmove                        |    1048593 |         80 |           20 |           22 |   1.1000 |
+> memmove                        |    1048593 |        257 |           36 |           32 |   0.8889 |
+> memmove                        |    1048593 |       1234 |          113 |           89 |   0.7876 |
+> memmove                        | 1073741841 |         32 |           85 |           80 |   0.9412 |
+> memmove                        | 1073741841 |       1234 |          308 |          295 |   0.9578 |
+> memmove                        | 1073741841 |      40763 |         3334 |         3274 |   0.9820 |
+|-------------------------------------------------------------------------|--------------|----------|
+> memset                         |    1048593 |         32 |           10 |           14 |   1.4000 |
+> memset                         |    1048593 |         80 |           10 |           16 |   1.6000 |
+> memset                         |    1048593 |        257 |           17 |           23 |   1.3529 |
+> memset                         |    1048593 |       1234 |           48 |           63 |   1.3125 |
+> memset                         | 1073741841 |         32 |           73 |           72 |   0.9863 |
+> memset                         | 1073741841 |       1234 |          235 |          244 |   1.0383 |
+> memset                         | 1073741841 |      40763 |         1627 |         1628 |   1.0006 |
+|-------------------------------------------------------------------------|--------------|----------|
+> memcmp                         |    1048593 |         32 |           41 |           25 |   0.6098 |
+> memcmp                         |    1048593 |         80 |           81 |           31 |   0.3827 |
+> memcmp                         |    1048593 |        257 |          227 |           53 |   0.2335 |
+> memcmp                         |    1048593 |       1234 |         1036 |          131 |   0.1264 |
+> memcmp                         | 1073741841 |         32 |          201 |          112 |   0.5572 |
+> memcmp                         | 1073741841 |       1234 |         1298 |          361 |   0.2781 |
+> memcmp                         | 1073741841 |      40763 |        34288 |         4842 |   0.1412 |
+'-------------------------------------------------------------------------'--------------'----------|
+Explanations:
+    string_copy:
+        Creates s1 strings of length s2 and then copies a random one to
+        another random one. Tries to avoid allocations.
+    substr:
+        Creates a string of length s1 and then uses substr to copy
+        substrings of length s2 out to a string variable. Tries to avoid
+        allocations.
+    strlen:
+        Creates s1 strings of length s2 and then uses strlen on random ones.
+    memcpy:
+        Creates a memory area of size s1 and then uses memcpy to copy
+        some random area of size s2 to another one (non-overlapping).
+    memmove: Creates a memory area of size s1 and then uses memmove to
+        copy some random area of size s2 to another one (possibly
+        overlapping).
+    memset:
+        Creates a memory area of size s1 and then uses memset to set
+        some random area of size s2 to a random byte value.
+    memcmp:
+        This test allocates a memory area of size `size1` bytes and
+        fills it with the same byte. Then it uses memcmp to compare two
+        regions of size `size2` in it. That is, all comparisons are
+        equal.
+    (all individual runtimes in nanoseconds, total time in seconds)

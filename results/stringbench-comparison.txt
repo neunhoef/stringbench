@@ -1,0 +1,79 @@
+.-------------------------------------------------------------------------.--------------.--------------.--------------.--------------.----------.
+|              test              |     s1     |     s2     |musl, gcc11.2 |musl, gcc12.1 |perf, clang16 |glibc, clang15|glibc, clang15|perf/musl |
+|                                |            |            |   STATIC     |   STATIC     |    STATIC    |    STATIC    |   DYNAMIC    |          |
+|-------------------------------------------------------------------------|--------------|--------------|--------------|--------------|----------|
+> string_copy                    |     100001 |         32 |         43ns |         47ns |         21ns |         22ns |         22ns |   0.4884 |
+> string_copy                    |     100001 |         80 |         45ns |         49ns |         26ns |         26ns |         27ns |   0.5778 |
+> string_copy                    |     100001 |        257 |         51ns |         55ns |         41ns |         41ns |         40ns |   0.8039 |
+> string_copy                    |      10001 |       1234 |        120ns |        136ns |        120ns |        120ns |        121ns |   1.0000 |
+> string_copy                    |       1001 |    1048593 |     131944ns |     138071ns |     132959ns |     132141ns |     132283ns |   1.0077 |
+|-------------------------------------------------------------------------|--------------|--------------|--------------|--------------|----------|
+> substr                         |     100001 |         32 |         62ns |         64ns |         29ns |         16ns |         18ns |   0.4677 |
+> substr                         |     100001 |         80 |         64ns |         65ns |         31ns |         17ns |         17ns |   0.4844 |
+> substr                         |     100001 |        257 |         92ns |         91ns |         47ns |         20ns |         20ns |   0.5109 |
+> substr                         | 1073741841 |         48 |        169ns |        173ns |        124ns |         72ns |         82ns |   0.7337 |
+> substr                         | 1073741841 |       1234 |        336ns |        340ns |        245ns |        273ns |        283ns |   0.7292 |
+> substr                         | 1073741841 |    1626361 |     493184ns |     505638ns |     512361ns |     102117ns |     102085ns |   1.0389 |
+|-------------------------------------------------------------------------|--------------|--------------|--------------|--------------|----------|
+> strlen                         |     100001 |         32 |         18ns |         18ns |          8ns |          8ns |          8ns |   0.4444 |
+> strlen                         |     100001 |         80 |         32ns |         34ns |         11ns |         11ns |         11ns |   0.3438 |
+> strlen                         |     100001 |        257 |         75ns |         80ns |         29ns |         28ns |         28ns |   0.3867 |
+> strlen                         |      10001 |       1234 |        182ns |        191ns |         84ns |         79ns |         79ns |   0.4615 |
+> strlen                         |       1001 |    1048593 |     109435ns |     110959ns |      66827ns |      66866ns |      66692ns |   0.6107 |
+|-------------------------------------------------------------------------|--------------|--------------|--------------|--------------|----------|
+> memcpy                         |    1048593 |         32 |         43ns |         43ns |          8ns |          7ns |          7ns |   0.1860 |
+> memcpy                         |    1048593 |         80 |         45ns |         44ns |          9ns |          9ns |          9ns |   0.2000 |
+> memcpy                         |    1048593 |        257 |         50ns |         49ns |         15ns |         16ns |         17ns |   0.3000 |
+> memcpy                         |    1048593 |       1234 |         56ns |         56ns |         34ns |         41ns |         46ns |   0.6071 |
+> memcpy                         | 1073741841 |         32 |        145ns |        147ns |         48ns |         42ns |         42ns |   0.3310 |
+> memcpy                         | 1073741841 |       1234 |        373ns |        382ns |        347ns |        350ns |        354ns |   0.9303 |
+> memcpy                         | 1073741841 |      40763 |       4784ns |       5048ns |       4608ns |       4604ns |       4606ns |   0.9632 |
+|-------------------------------------------------------------------------|--------------|--------------|--------------|--------------|----------|
+> memmove                        |    1048593 |         32 |         40ns |         40ns |          7ns |          7ns |          7ns |   0.1750 |
+> memmove                        |    1048593 |         80 |         42ns |         42ns |          8ns |          9ns |          9ns |   0.1905 |
+> memmove                        |    1048593 |        257 |         50ns |         50ns |         14ns |         15ns |         16ns |   0.2800 |
+> memmove                        |    1048593 |       1234 |         81ns |         83ns |         34ns |         39ns |         42ns |   0.4198 |
+> memmove                        | 1073741841 |         32 |        137ns |        139ns |         40ns |         40ns |         40ns |   0.2920 |
+> memmove                        | 1073741841 |       1234 |        367ns |        376ns |        346ns |        348ns |        352ns |   0.9428 |
+> memmove                        | 1073741841 |      40763 |       6036ns |       6219ns |       5723ns |       5731ns |       5732ns |   0.9481 |
+|-------------------------------------------------------------------------|--------------|--------------|--------------|--------------|----------|
+> memset                         |    1048593 |         32 |          7ns |          7ns |          4ns |          5ns |          5ns |   0.5714 |
+> memset                         |    1048593 |         80 |         11ns |         11ns |          6ns |          6ns |          7ns |   0.5455 |
+> memset                         |    1048593 |        257 |         15ns |         14ns |         11ns |         12ns |         13ns |   0.7333 |
+> memset                         |    1048593 |       1234 |         38ns |         35ns |         27ns |         31ns |         33ns |   0.7105 |
+> memset                         | 1073741841 |         32 |         48ns |         49ns |         28ns |         29ns |         28ns |   0.5833 |
+> memset                         | 1073741841 |       1234 |        275ns |        283ns |        201ns |        201ns |        201ns |   0.7309 |
+> memset                         | 1073741841 |      40763 |       3372ns |       3475ns |       3354ns |       3354ns |       3352ns |   0.9947 |
+|-------------------------------------------------------------------------|--------------|--------------|--------------|--------------|----------|
+> memcmp                         |    1048593 |         32 |         25ns |         26ns |          7ns |          7ns |          8ns |   0.2800 |
+> memcmp                         |    1048593 |         80 |         52ns |         54ns |         10ns |         10ns |         10ns |   0.1923 |
+> memcmp                         |    1048593 |        257 |        159ns |        161ns |         15ns |         16ns |         16ns |   0.0943 |
+> memcmp                         |    1048593 |       1234 |        720ns |        722ns |         45ns |         47ns |         48ns |   0.0625 |
+> memcmp                         | 1073741841 |         32 |        143ns |        154ns |         47ns |         46ns |         47ns |   0.3287 |
+> memcmp                         | 1073741841 |       1234 |        879ns |        891ns |        253ns |        253ns |        253ns |   0.2878 |
+> memcmp                         | 1073741841 |      40763 |      23744ns |      23777ns |       5688ns |       5690ns |       5689ns |   0.2396 |
+'-------------------------------------------------------------------------'--------------'--------------'--------------'--------------'----------'
+Explanations:
+    string_copy:
+        Creates s1 strings of length s2 and then copies a random one to
+        another random one. Tries to avoid allocations.
+    substr:
+        Creates a string of length s1 and then uses substr to copy
+        substrings of length s2 out to a string variable. Tries to avoid
+        allocations.
+    strlen:
+        Creates s1 strings of length s2 and then uses strlen on random ones.
+    memcpy:
+        Creates a memory area of size s1 and then uses memcpy to copy
+        some random area of size s2 to another one (non-overlapping).
+    memmove: Creates a memory area of size s1 and then uses memmove to
+        copy some random area of size s2 to another one (possibly
+        overlapping).
+    memset:
+        Creates a memory area of size s1 and then uses memset to set
+        some random area of size s2 to a random byte value.
+    memcmp:
+        This test allocates a memory area of size `size1` bytes and
+        fills it with the same byte. Then it uses memcmp to compare two
+        regions of size `size2` in it. That is, all comparisons are
+        equal.

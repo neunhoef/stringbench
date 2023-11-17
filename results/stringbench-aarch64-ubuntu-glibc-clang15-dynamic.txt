@@ -1,0 +1,80 @@
+Hello, I measure performance of string and memory operations. Version: 1
+.-------------------------------------------------------------------------------------------------------.
+|              test              |     s1     |     s2     |  number ops  |  total time  | time per op  |
+|-------------------------------------------------------------------------------------------------------|
+> string_copy                    |     100001 |         32 |     50901305 |     3.01956s |           59 |
+> string_copy                    |     100001 |         80 |     27026137 |     2.76654s |          102 |
+> string_copy                    |     100001 |        257 |     15166475 |      2.9919s |          197 |
+> string_copy                    |      10001 |       1234 |     17211212 |      3.0292s |          176 |
+> string_copy                    |       1001 |    1048593 |        46654 |     3.00315s |        64370 |
+|-------------------------------------------------------------------------------------------------------|
+> substr                         |     100001 |         32 |     74949153 |     2.97044s |           39 |
+> substr                         |     100001 |         80 |     73836174 |     2.97989s |           40 |
+> substr                         |     100001 |        257 |     69191797 |     2.97142s |           42 |
+> substr                         | 1073741841 |         48 |     16371406 |     2.92499s |          178 |
+> substr                         | 1073741841 |       1234 |      7144088 |     2.93019s |          410 |
+> substr                         | 1073741841 |    1626361 |        32735 |     3.01011s |        91953 |
+|-------------------------------------------------------------------------------------------------------|
+> strlen                         |     100001 |         32 |     73660118 |     2.91896s |           39 |
+> strlen                         |     100001 |         80 |     61658248 |     3.52958s |           57 |
+> strlen                         |     100001 |        257 |     16254018 |     2.95557s |          181 |
+> strlen                         |      10001 |       1234 |     20454683 |     2.96821s |          145 |
+> strlen                         |       1001 |    1048593 |        57943 |     2.99332s |        51659 |
+|-------------------------------------------------------------------------------------------------------|
+> memcpy                         |    1048593 |         32 |    154397983 |     2.96688s |           19 |
+> memcpy                         |    1048593 |         80 |    134436037 |     2.95257s |           21 |
+> memcpy                         |    1048593 |        257 |     91573597 |     2.95531s |           32 |
+> memcpy                         |    1048593 |       1234 |     33420731 |     2.97679s |           89 |
+> memcpy                         | 1073741841 |         32 |     39373255 |      2.9019s |           73 |
+> memcpy                         | 1073741841 |       1234 |     10011855 |     2.86897s |          286 |
+> memcpy                         | 1073741841 |      40763 |      1212799 |     3.00745s |         2479 |
+|-------------------------------------------------------------------------------------------------------|
+> memmove                        |    1048593 |         32 |    162697186 |     2.96453s |           18 |
+> memmove                        |    1048593 |         80 |    133871639 |     2.95286s |           22 |
+> memmove                        |    1048593 |        257 |     89950554 |     2.94309s |           32 |
+> memmove                        |    1048593 |       1234 |     33212591 |     2.97302s |           89 |
+> memmove                        | 1073741841 |         32 |     36566678 |     2.93559s |           80 |
+> memmove                        | 1073741841 |       1234 |     10112584 |     2.99223s |          295 |
+> memmove                        | 1073741841 |      40763 |       913706 |     2.99233s |         3274 |
+|-------------------------------------------------------------------------------------------------------|
+> memset                         |    1048593 |         32 |    198279143 |     2.87717s |           14 |
+> memset                         |    1048593 |         80 |    178353978 |     2.95638s |           16 |
+> memset                         |    1048593 |        257 |    123166889 |     2.94635s |           23 |
+> memset                         |    1048593 |       1234 |     46787188 |     2.97381s |           63 |
+> memset                         | 1073741841 |         32 |     40879896 |     2.96106s |           72 |
+> memset                         | 1073741841 |       1234 |     11935902 |     2.91596s |          244 |
+> memset                         | 1073741841 |      40763 |      1844631 |     3.00403s |         1628 |
+|-------------------------------------------------------------------------------------------------------|
+> memcmp                         |    1048593 |         32 |    116454843 |     2.97261s |           25 |
+> memcmp                         |    1048593 |         80 |     93072710 |     2.96837s |           31 |
+> memcmp                         |    1048593 |        257 |     55136290 |     2.97589s |           53 |
+> memcmp                         |    1048593 |       1234 |     22712238 |     2.98557s |          131 |
+> memcmp                         | 1073741841 |         32 |     26540168 |      2.9847s |          112 |
+> memcmp                         | 1073741841 |       1234 |      8204938 |     2.96567s |          361 |
+> memcmp                         | 1073741841 |      40763 |       619798 |     3.00161s |         4842 |
+'-------------------------------------------------------------------------------------------------------'
+Explanations:
+    string_copy:
+        Creates s1 strings of length s2 and then copies a random one to
+        another random one. Tries to avoid allocations.
+    substr:
+        Creates a string of length s1 and then uses substr to copy
+        substrings of length s2 out to a string variable. Tries to avoid
+        allocations.
+    strlen:
+        Creates s1 strings of length s2 and then uses strlen on random ones.
+    memcpy:
+        Creates a memory area of size s1 and then uses memcpy to copy
+        some random area of size s2 to another one (non-overlapping).
+    memmove: Creates a memory area of size s1 and then uses memmove to
+        copy some random area of size s2 to another one (possibly
+        overlapping).
+    memset:
+        Creates a memory area of size s1 and then uses memset to set
+        some random area of size s2 to a random byte value.
+    memcmp:
+        This test allocates a memory area of size `size1` bytes and
+        fills it with the same byte. Then it uses memcmp to compare two
+        regions of size `size2` in it. That is, all comparisons are
+        equal.
+    (all individual runtimes in nanoseconds, total time in seconds)
