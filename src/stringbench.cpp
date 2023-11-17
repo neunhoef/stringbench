@@ -268,7 +268,7 @@ void footer() {
 void report(std::string_view title, uint64_t n, uint64_t s1, uint64_t s2,
             std::chrono::duration<double> runTime) {
   std::cout << fmt::format(
-      "> {:<30s} | {:>10d} | {:>10d} | {:>12d} | {:>12%Q%q} | {:>12%Q%q} "
+      "> {:<30s} | {:>10d} | {:>10d} | {:>12d} | {:>12%Q%q} | {:>12%Q} "
       "|\n",
       title, s1, s2, n, runTime,
       std::chrono::duration_cast<std::chrono::nanoseconds>(
@@ -410,6 +410,7 @@ int main(int argc, char* argv[]) {
         fills it with the same byte. Then it uses memcmp to compare two
         regions of size `size2` in it. That is, all comparisons are
         equal.
+    (all individual runtimes in nanoseconds, total time in seconds)
 )";
   return 0;
 }
