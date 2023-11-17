@@ -376,13 +376,13 @@ int main(int argc, char* argv[]) {
 
   divider();
 
-  measure<MemCmp>("memset", 1024 * 1024 + 17, 32);
-  measure<MemCmp>("memset", 1024 * 1024 + 17, 80);
-  measure<MemCmp>("memset", 1024 * 1024 + 17, 257);
-  measure<MemCmp>("memset", 1024 * 1024 + 17, 1234);
-  measure<MemCmp>("memset", 1024 * 1024 * 1024 + 17, 32);
-  measure<MemCmp>("memset", 1024 * 1024 * 1024 + 17, 1234);
-  measure<MemCmp>("memset", 1024 * 1024 * 1024 + 17, 40763);
+  measure<MemCmp>("memcmp", 1024 * 1024 + 17, 32);
+  measure<MemCmp>("memcmp", 1024 * 1024 + 17, 80);
+  measure<MemCmp>("memcmp", 1024 * 1024 + 17, 257);
+  measure<MemCmp>("memcmp", 1024 * 1024 + 17, 1234);
+  measure<MemCmp>("memcmp", 1024 * 1024 * 1024 + 17, 32);
+  measure<MemCmp>("memcmp", 1024 * 1024 * 1024 + 17, 1234);
+  measure<MemCmp>("memcmp", 1024 * 1024 * 1024 + 17, 40763);
 
   footer();
 
