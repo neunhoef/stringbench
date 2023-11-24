@@ -8,9 +8,16 @@
 #include <iostream>
 #include <vector>
 
+#if 0
+// For now a failed experiment:
 extern "C" {
 void* __memcpy_avx_unaligned(void* dest, const void* src, size_t n);
+
+void* memcpy(void* dest, const void* src, size_t n) {
+  return __memcpy_avx_unaligned(dest, src, n);
 }
+}
+#endif
 
 constexpr uint64_t VERSION = 1;
 
@@ -130,44 +137,6 @@ struct MemCpy {
   }
   uint64_t work(uint64_t) {
     memcpy(&v[pos2], &v[pos1], size2);
-    pos1 += 47153;
-    if (pos1 > size1 - size2) {
-      pos1 = pos1 % (size1 - size2);
-    }
-    pos2 += 47153;
-    if (pos2 > size1 - size2) {
-      pos2 = pos2 % (size1 - size2);
-    }
-    return v[pos1];
-  }
-};
-
-struct MemCpyAvx {
-  // This test allocates a memory area of size `size1` bytes and then
-  // copies a pseudo random subrange of size `size2` to some other pseudo
-  // random place.
-  std::vector<char> v;
-  uint64_t size1;
-  uint64_t size2;
-  uint64_t pos1;
-  uint64_t pos2;
-  MemCpyAvx(uint64_t size1, uint64_t size2)
-      : size1(size1), size2(size2), pos1(0), pos2(1234567 % (size1 - size2)) {
-    if (size2 * 100 > size1) {
-      std::cout << "size1 must be 100x larger than size2!" << std::endl;
-      std::abort();
-    }
-    if (pos2 < size2) {
-      // Just to move it away from pos1
-      pos2 += 47 * size2;
-    }
-    v.reserve(size1);
-    for (uint64_t i = 0; i < size1; ++i) {
-      v.push_back('0' + (char)(i % 78));
-    }
-  }
-  uint64_t work(uint64_t) {
-    __memcpy_avx_unaligned(&v[pos2], &v[pos1], size2);
     pos1 += 47153;
     if (pos1 > size1 - size2) {
       pos1 = pos1 % (size1 - size2);
@@ -395,16 +364,6 @@ int main(int argc, char* argv[]) {
   measure<MemCpy>("memcpy", 1024 * 1024 * 1024 + 17, 32);
   measure<MemCpy>("memcpy", 1024 * 1024 * 1024 + 17, 1234);
   measure<MemCpy>("memcpy", 1024 * 1024 * 1024 + 17, 40763);
-
-  divider();
-
-  measure<MemCpyAvx>("memcpy", 1024 * 1024 + 17, 32);
-  measure<MemCpyAvx>("memcpy", 1024 * 1024 + 17, 80);
-  measure<MemCpyAvx>("memcpy", 1024 * 1024 + 17, 257);
-  measure<MemCpyAvx>("memcpy", 1024 * 1024 + 17, 1234);
-  measure<MemCpyAvx>("memcpy", 1024 * 1024 * 1024 + 17, 32);
-  measure<MemCpyAvx>("memcpy", 1024 * 1024 * 1024 + 17, 1234);
-  measure<MemCpyAvx>("memcpy", 1024 * 1024 * 1024 + 17, 40763);
 
   divider();
 
